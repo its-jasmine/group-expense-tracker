@@ -3,30 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Group Expense Tracker</title>
+    <style>
+        #members-list {
+            border-style: solid;
+        }
+    </style>
 </head>
 <body>
 <h1>Members</h1>
-<button onclick="displayMemberInput()">Add Member</button>
-<ul>
-    <li>Person1</li>
-    <li>Person2</li>
-    <li>Person3</li>
-</ul>
-<h1>Expense</h1>
-<button>Add Expense</button>
-<ul>
-    <li>Expense1</li>
-    <li>Expense2</li>
-    <li>Expense3</li>
-</ul>
+<form method="post" th:action="@{/members/create}" th:object="${member}">
+    <label for="member-name">Name: </label>
+    <input id="member-name" type="text" th:field="*{name}">
+    <button type="submit">Add Member</button>
+</form>
+
+<div id="members-list">
+    <form th:if="${members}" th:each="member : ${members}" method="post" th:action="@{/members/delete}" >
+        <span th:text="${member.getName()}"></span>
+        <input type="hidden" th:value="${member.getId()}" name="id">
+        <button type="submit">Delete</button>
+    </form>
+</div>
 
 </body>
 </html>
-<script>
-    function displayMemberInput(){
-        let newMember = prompt("Please enter the name of the new member");
-    }
-    function displayExpenseForm(){
-        console.log("TODO expense form")
-    }
-</script>
