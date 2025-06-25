@@ -1,5 +1,6 @@
 package com.jasminegadelhak.groupexpensetracker.controller;
 
+import com.jasminegadelhak.groupexpensetracker.model.Currency;
 import com.jasminegadelhak.groupexpensetracker.model.Expense;
 import com.jasminegadelhak.groupexpensetracker.model.Member;
 import com.jasminegadelhak.groupexpensetracker.repositories.ExpenseRepository;
@@ -29,6 +30,10 @@ public class GroupExpenseTrackerController {
         List<Member> members =  memberRepo.findAll();
         if (!members.isEmpty()) { model.addAttribute("members", members); }
 
+        List<Expense> expenses =  expenseRepo.findAll();
+        if (!expenses.isEmpty()) { model.addAttribute("expenses",expenses);}
+
+        model.addAttribute("currencies", Currency.values());
         return "home";
     }
 
@@ -40,6 +45,17 @@ public class GroupExpenseTrackerController {
     @PostMapping("/members/delete")
     public String removeMember(@RequestParam("id") Long id){
         memberRepo.deleteById(id);
+        return "redirect:/";
+    }
+
+    @PostMapping("/expenses/create")
+    public String addExpense(@ModelAttribute Expense expense){
+        expenseRepo.save(expense);
+        return "redirect:/";
+    }
+    @PostMapping("/expenses/delete")
+    public String removeExpense(@RequestParam("id") Long id){
+        expenseRepo.deleteById(id);
         return "redirect:/";
     }
 }

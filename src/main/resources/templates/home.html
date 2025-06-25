@@ -4,24 +4,82 @@
     <meta charset="UTF-8">
     <title>Group Expense Tracker</title>
     <style>
-        #members-list {
+        .flex-row {
+            display: flex;
+            gap: 10px;
+        }
+        .bordered-container {
             border-style: solid;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
 <h1>Members</h1>
-<form method="post" th:action="@{/members/create}" th:object="${member}">
-    <label for="member-name">Name: </label>
-    <input id="member-name" type="text" th:field="*{name}">
-    <button type="submit">Add Member</button>
-</form>
+<div id="members-container" class="flex-row">
+    <div id="members-list" class="bordered-container">
+        <form th:if="${members}" th:each="member : ${members}" method="post" th:action="@{/members/delete}" >
+            <span th:text="${member.getName()}"></span>
+            <input type="hidden" th:value="${member.getId()}" name="id">
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+    <form method="post" th:action="@{/members/create}" th:object="${member}" class="bordered-container">
+        <label for="member-name">Name: </label>
+        <input id="member-name" type="text" th:field="*{name}">
+        <button type="submit">Add Member</button>
+    </form>
+</div>
 
-<div id="members-list">
-    <form th:if="${members}" th:each="member : ${members}" method="post" th:action="@{/members/delete}" >
-        <span th:text="${member.getName()}"></span>
-        <input type="hidden" th:value="${member.getId()}" name="id">
-        <button type="submit">Delete</button>
+<h1>Expenses</h1>
+<div id="expense-container" class="flex-row">
+    <table id="expense-list" class="bordered-container" th:if="${expenses}" >
+        <tr>
+            <th>Expense</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Paid By</th>
+            <th></th>
+        </tr>
+        <tr th:if="${expenses}" th:each="expense : ${expenses}" >
+            <td th:text="${expense.getName()}"></td>
+            <td th:text="${expense.getAmount()}"></td>
+            <td th:text="${expense.getCurrency()}"></td>
+            <td th:text="${expense.getPaidBy().getName()}"></td>
+            <td>
+                <form method="post" th:action="@{/expenses/delete}" >
+                    <input type="hidden" th:value="${expense.getId()}" name="id">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+
+    </table>
+    <form class="bordered-container" method="post" th:action="@{/expenses/create}" th:object="${expense}">
+        <div>
+            <label for="exp-name">Name: </label>
+            <input id="exp-name" type="text" th:field="*{name}">
+        </div>
+        <div>
+            <label for="exp-amount">Amount: </label>
+            <input id="exp-amount" type="number" th:field="*{amount}">
+        </div>
+        <div>
+            <label for="exp-currency">Currency: </label>
+            <select id="exp-currency" th:field="*{currency}">
+                <option th:each="currency : ${currencies}" th:text="${currency}" th:value="${currency}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="exp-paid-by">Paid By: </label>
+            <select id="exp-paid-by" th:field="*{paidBy}">
+                <option th:each="member : ${members}" th:text="${member.name}" th:value="${member.getId()}"></option>
+            </select>
+        </div>
+        <!-- TODO allow selection of members involved in expense, for now we assume everyone is contributing to every expense -->
+
+        <button type="submit">Add Expense</button>
     </form>
 </div>
 

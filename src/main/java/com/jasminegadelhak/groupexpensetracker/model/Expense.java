@@ -13,7 +13,7 @@ public class Expense {
     private String name;
     private float amount;
     private Currency currency;
-    @OneToOne // TODO future iteration: change to list, @OneToMany
+    @ManyToOne // TODO future iteration: change to list, @OneToMany
     private Member paidBy;
     @OneToMany
     private List<Member> members;
