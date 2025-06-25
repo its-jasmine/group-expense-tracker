@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,10 +23,23 @@ class GroupExpenseTrackerControllerTest {
 
     @Autowired
     private MockMvc mockMvc; // simulates HTTP requests
-    @MockBean
+    @Autowired
     private ExpenseRepository expenseRepository;
-    @MockBean
+    @Autowired
     private MemberRepository memberRepository;
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public ExpenseRepository expenseRepository() {
+            return mock(ExpenseRepository.class);
+        }
+
+        @Bean
+        public MemberRepository memberRepository() {
+            return mock(MemberRepository.class);
+        }
+    }
 
     @Test
     void home() throws Exception {
