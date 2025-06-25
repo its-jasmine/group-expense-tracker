@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
 public class GroupExpenseTrackerApplication {
@@ -16,6 +17,7 @@ public class GroupExpenseTrackerApplication {
 	}
 
 	@Bean
+	@Profile("!test") // won't run this bean when test profile is active
 	public CommandLineRunner initSampleData(MemberRepository memberRepo){
 		/*
 		Note to self:
