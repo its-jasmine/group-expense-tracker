@@ -10,6 +10,7 @@ public class Member {
     @GeneratedValue
     private Long id;
     private String name;
+    //private float expensesPaid; TODO look into efficiency advantages of keeping a running tally, decide on best design
 
     public Member(String name) {
         this.name = name;

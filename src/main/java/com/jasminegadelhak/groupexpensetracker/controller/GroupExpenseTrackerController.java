@@ -1,10 +1,7 @@
 package com.jasminegadelhak.groupexpensetracker.controller;
 
-import com.jasminegadelhak.groupexpensetracker.model.Currency;
-import com.jasminegadelhak.groupexpensetracker.model.Expense;
-import com.jasminegadelhak.groupexpensetracker.model.Member;
-import com.jasminegadelhak.groupexpensetracker.repositories.ExpenseRepository;
-import com.jasminegadelhak.groupexpensetracker.repositories.MemberRepository;
+import com.jasminegadelhak.groupexpensetracker.model.*;
+import com.jasminegadelhak.groupexpensetracker.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +30,10 @@ public class GroupExpenseTrackerController {
         List<Expense> expenses =  expenseRepo.findAll();
         if (!expenses.isEmpty()) { model.addAttribute("expenses",expenses);}
 
+        // TODO total expenses
+
         model.addAttribute("currencies", Currency.values());
+
         return "home";
     }
 

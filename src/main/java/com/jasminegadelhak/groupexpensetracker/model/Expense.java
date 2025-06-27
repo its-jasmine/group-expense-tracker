@@ -11,7 +11,7 @@ public class Expense {
     @GeneratedValue
     private Long id;
     private String name;
-    private float amount;
+    private float amount; // TODO use BigDecimal, maybe create custom Amount class
     private Currency currency;
     @ManyToOne // TODO future iteration: change to list, @OneToMany
     private Member paidBy;
