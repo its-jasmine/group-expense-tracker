@@ -14,10 +14,13 @@ public class GroupExpenseTrackerController {
     private MemberRepository memberRepo;
     private ExpenseRepository expenseRepo;
 
+    private OwingCalculator owingCalculator;
+
     @Autowired
     GroupExpenseTrackerController(MemberRepository memberRepo, ExpenseRepository expenseRepo){
         this.memberRepo = memberRepo;
         this.expenseRepo = expenseRepo;
+        this.owingCalculator = new OwingCalculator();
     }
 
     @GetMapping
@@ -57,5 +60,14 @@ public class GroupExpenseTrackerController {
     public String removeExpense(@RequestParam("id") Long id){
         expenseRepo.deleteById(id);
         return "redirect:/";
+    }
+
+    @PostMapping("/calculate-owing")
+    public String calculateOwing(Model model) {
+        OwingCalculator owingCalculator = new OwingCalculator();
+        model.addAttribute("owings", owingCalculator.calculateOwings(memberRepo.findAll(), expenseRepo.findAll()).entrySet().stream().toArray());
+
+        return "owing-result";
+
     }
 }

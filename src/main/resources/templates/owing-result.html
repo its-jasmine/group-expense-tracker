@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Owing Result | Divido </title>
+    <style>
+        .bordered-container {
+            border-style: solid;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Owings</h1>
+<div th:each="member : ${owings}" class="bordered-container">
+    <p th:text="${member.getKey().getName()}"></p>
+    <ul>
+        <li th:each="owing : ${member.getValue()}" th:text="|needs to give ${#numbers.formatCurrency(owing.value)} to ${owing.key.getName()}|"></li>
+    </ul>
+</div>
+
+
+</body>
+</html>

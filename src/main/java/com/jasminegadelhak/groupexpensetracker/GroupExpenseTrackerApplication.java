@@ -1,8 +1,10 @@
 package com.jasminegadelhak.groupexpensetracker;
 
 
+import com.jasminegadelhak.groupexpensetracker.model.Currency;
+import com.jasminegadelhak.groupexpensetracker.model.Expense;
 import com.jasminegadelhak.groupexpensetracker.model.Member;
-import com.jasminegadelhak.groupexpensetracker.repositories.MemberRepository;
+import com.jasminegadelhak.groupexpensetracker.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +20,7 @@ public class GroupExpenseTrackerApplication {
 
 	@Bean
 	@Profile("!test") // won't run this bean when test profile is active
-	public CommandLineRunner initSampleData(MemberRepository memberRepo){
+	public CommandLineRunner initSampleData(MemberRepository memberRepo, ExpenseRepository expenseRepository){
 		/*
 		Note to self:
 		The CommandLineRunner is an interface in Spring Boot. When a class implements this interface,
@@ -32,6 +34,7 @@ public class GroupExpenseTrackerApplication {
 			for (int i  = 1; i <= 3; i++){
 				m = new Member("Member " + i);
 				memberRepo.save(m);
+				expenseRepository.save(new Expense("test" + i,3 * i , Currency.CAD, m, null));
 			}
 		};
 	}
