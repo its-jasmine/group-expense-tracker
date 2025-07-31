@@ -51,6 +51,15 @@ public class GroupExpenseTrackerController {
         return "redirect:/";
     }
 
+    @PostMapping("/members/edit")
+    public String editMember(@RequestParam("id") Long id,  @RequestParam("name")String newName){
+        Member m = memberRepo.findById(id).get();
+        m.setName(newName);
+        memberRepo.save(m);
+
+        return "redirect:/";
+    }
+
     @PostMapping("/expenses/create")
     public String addExpense(@ModelAttribute Expense expense){
         expenseRepo.save(expense);
@@ -59,6 +68,11 @@ public class GroupExpenseTrackerController {
     @PostMapping("/expenses/delete")
     public String removeExpense(@RequestParam("id") Long id){
         expenseRepo.deleteById(id);
+        return "redirect:/";
+    }
+    @PostMapping("/expenses/edit")
+    public String editExpense(@ModelAttribute Expense expense){
+        expenseRepo.save(expense);
         return "redirect:/";
     }
 
