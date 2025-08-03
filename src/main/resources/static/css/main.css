@@ -31,18 +31,18 @@ body {
 
 footer {
     text-align: center;
+    padding: 20px;
 }
 
 main {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     align-items: center;
     justify-content: center;
-    gap: 30px;
 }
 
 section {
     max-width: 1200px;
+    margin-top: 1rem;
 }
 
 /* Header */

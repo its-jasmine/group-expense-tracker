@@ -37,6 +37,10 @@ public class GroupExpenseTrackerController {
 
         model.addAttribute("currencies", Currency.values());
 
+        OwingCalculator owingCalculator = new OwingCalculator();
+        model.addAttribute("owings", owingCalculator.calculateOwings(members, expenses).entrySet().stream().toArray());
+
+
         return "home";
     }
 
@@ -74,14 +78,5 @@ public class GroupExpenseTrackerController {
     public String editExpense(@ModelAttribute Expense expense){
         expenseRepo.save(expense);
         return "redirect:/";
-    }
-
-    @PostMapping("/calculate-owing")
-    public String calculateOwing(Model model) {
-        OwingCalculator owingCalculator = new OwingCalculator();
-        model.addAttribute("owings", owingCalculator.calculateOwings(memberRepo.findAll(), expenseRepo.findAll()).entrySet().stream().toArray());
-
-        return "owing-result";
-
     }
 }

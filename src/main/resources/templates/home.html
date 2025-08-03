@@ -10,12 +10,9 @@
         .flex-row {
             display: flex;
             gap: 10px;
-            align-items: center;
+            align-items: stretch;
             justify-content: center;
-        }
-        .bordered-container {
-            border-style: solid;
-            padding: 10px;
+
         }
 
 
@@ -57,6 +54,93 @@
             padding: 2rem;
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
+        }
+
+        /* Buttons */
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+
+        /* Members Section */
+        .members-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .member-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light-purple);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .member-item:hover {
+            background: #d4c5ff;
+        }
+
+        .member-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .balance {
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .balance.positive {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .balance.negative {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .balance.zero {
+            background: #f3f4f6;
+            color: var(--text-light);
         }
 
 
@@ -117,11 +201,11 @@
         <div id="members-card" class="card">
             <div class="card-header flex-row">
                 <h2>Members</h2>
-                <button onclick="showMemberModal()">Add Member</button>
+                <button class="btn-primary" onclick="showMemberModal()">Add Member</button>
             </div>
-            <div id="members-list" class="bordered-container">
+            <div class="members-list">
 
-                <div th:if="${members}" th:each="member : ${members}" class="flex-row">
+                <div th:if="${members}" th:each="member : ${members}" class="flex-row member-item">
 
                     <form class="flex-row" method="post" th:action="@{/members/edit}" >
                         <input type="hidden" th:value="${member.getId()}" name="id">
@@ -154,7 +238,7 @@
         <div id="expenses-card" class="card">
             <div class="card-header flex-row">
                 <h2>Expenses</h2>
-                <button onclick="showExpenseModal(this)">Add Expense</button>
+                <button class="btn-primary" onclick="showExpenseModal(this)">Add Expense</button>
             </div>
             <table class="expenses-table" th:if="${expenses}" >
                 <thead>
@@ -234,10 +318,12 @@
 
         <div id="owings-card" class="card">
             <div class="card-header">
-                <h2>Owings</h2>
-                <form method="post" action="/calculate-owing">
-                    <button type="submit">Calculate Owing</button>
-                </form>
+                <h2>Settlement Summary</h2>
+                <div th:each="member : ${owings}" class="bordered-container">
+                    <span>
+                        <p th:each="owing : ${member.getValue()}" th:text="|${member.getKey().getName()} pays ${owing.key.getName()}: ${#numbers.formatCurrency(owing.value)}|"></p>
+                    </span>
+                </div>
             </div>
         </div>
 
