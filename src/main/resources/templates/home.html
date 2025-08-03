@@ -180,17 +180,16 @@
     <div class="header-content">
         <div class="logo">Divido</div>
         <div class="stats">
-            <!-- TODO populate with accurate data -->
             <div class="stat-item">
-                <h3>_</h3>
+                <h3 th:text="${memberCount}"></h3>
                 <p>Members</p>
             </div>
             <div class="stat-item">
-                <h3>$_._</h3>
+                <h3 th:text="|$${#numbers.formatDecimal(expenseSum,1,2)}|"></h3>
                 <p>Total Expenses</p>
             </div>
             <div class="stat-item">
-                <h3>_</h3>
+                <h3 th:text="${expenseCount}"></h3>
                 <p>Transactions</p>
             </div>
         </div>

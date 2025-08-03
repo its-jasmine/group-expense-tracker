@@ -27,11 +27,16 @@ public class GroupExpenseTrackerController {
     public String home(Model model){
         model.addAttribute("member", new Member());
         model.addAttribute("expense", new Expense());
+
         List<Member> members =  memberRepo.findAll();
         if (!members.isEmpty()) { model.addAttribute("members", members); }
+        model.addAttribute("memberCount", memberRepo.count());
 
         List<Expense> expenses =  expenseRepo.findAll();
         if (!expenses.isEmpty()) { model.addAttribute("expenses",expenses);}
+        model.addAttribute("expenseSum", expenseRepo.sumAllExpenses());
+        model.addAttribute("expenseCount", expenseRepo.count());
+
 
         // TODO total expenses
 
