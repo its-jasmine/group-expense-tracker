@@ -3,28 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Divido | Home</title>
-    <style>
-        body {
-            background-color: lavender;
-        }
-        section {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            width: 50%;
-            text-align: center;
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 
-        }
-        main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-        }
-        footer {
-            text-align: center;
-        }
+    <style>
+
         .flex-row {
             display: flex;
             gap: 10px;
@@ -36,6 +18,8 @@
             padding: 10px;
         }
 
+
+        /* Modal Styling*/
         .modal-bg {
             position: fixed;
             top: 0;
@@ -65,16 +49,76 @@
             top: 5px;
             right: 5px;
         }
+
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+
+        /* Expenses Table */
+        .expenses-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .expenses-table th,
+        .expenses-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .expenses-table th {
+            background: var(--light-purple);
+            font-weight: 600;
+            color: var(--dark-purple);
+        }
+
+        .expenses-table tr:hover {
+            background: var(--bg-light);
+        }
+
+        .expense-amount {
+            font-weight: 600;
+            color: var(--primary-purple);
+        }
+
     </style>
 </head>
 <body>
 <header>
-    <h1>Divido ÷ </h1>
+    <div class="header-content">
+        <div class="logo">Divido</div>
+        <div class="stats">
+            <!-- TODO populate with accurate data -->
+            <div class="stat-item">
+                <h3>_</h3>
+                <p>Members</p>
+            </div>
+            <div class="stat-item">
+                <h3>$_._</h3>
+                <p>Total Expenses</p>
+            </div>
+            <div class="stat-item">
+                <h3>_</h3>
+                <p>Transactions</p>
+            </div>
+        </div>
+    </div>
 </header>
 <main>
-    <section>
-        <h2>Members</h2>
-        <div id="members-container" class="flex-row">
+    <section class="flex-row">
+        <div id="members-card" class="card">
+            <div class="card-header flex-row">
+                <h2>Members</h2>
+                <button onclick="showMemberModal()">Add Member</button>
+            </div>
             <div id="members-list" class="bordered-container">
 
                 <div th:if="${members}" th:each="member : ${members}" class="flex-row">
@@ -94,39 +138,47 @@
 
                 </div>
             </div>
-
-            <form method="post" th:action="@{/members/create}" th:object="${member}" class="bordered-container">
-                <label for="member-name">Name: </label>
-                <input id="member-name" type="text" th:field="*{name}">
-                <button type="submit">Add Member</button> <!-- TODO maybe make this a modal too -->
-            </form>
+            <div class="modal-bg">
+                <div class="modal-box">
+                    <h1>Add new member</h1>
+                    <button class="close-modal-btn" type="button">&times</button>
+                    <form id="memberForm" method="post" th:action="@{/members/create}" th:object="${member}">
+                        <label for="member-name">Name: </label>
+                        <input id="member-name" type="text" th:field="*{name}">
+                        <button type="submit">Add Member</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </section>
-    <section>
-        <h2>Expenses</h2>
-        <div id="expense-container" class="flex-row">
-            <table id="expense-list" class="bordered-container" th:if="${expenses}" >
-                <tr>
+
+        <div id="expenses-card" class="card">
+            <div class="card-header flex-row">
+                <h2>Expenses</h2>
+                <button onclick="showExpenseModal(this)">Add Expense</button>
+            </div>
+            <table class="expenses-table" th:if="${expenses}" >
+                <thead>
                     <th>Expense</th>
                     <th>Amount</th>
                     <th>Currency</th>
                     <th>Paid By</th>
-                    <th></th>
-                </tr>
+                    <th colspan="2">Actions</th>
+
+                </thead>
                 <tr th:if="${expenses}" th:each="expense : ${expenses}" >
                     <td th:text="${expense.getName()}"></td>
-                    <td th:text="${expense.getAmount()}"></td>
+                    <td class="expense-amount" th:text="|$${#numbers.formatDecimal(expense.getAmount(),1,2)}|"></td>
                     <td th:text="${expense.getCurrency()}"></td>
                     <td th:text="${expense.getPaidBy().getName()}"></td>
                     <td>
-                        <!-- Using server-side data attributes to be able to populate edit modal. 
+                        <!-- Using server-side data attributes to be able to populate edit modal.
                         TODO As the amount of data increases, using a separate request to fetch this data may be better-->
                         <button onclick="showExpenseModal(this)"
-                            th:data-id="${expense.id}"
-                            th:data-name="${expense.name}"
-                            th:data-amount="${expense.amount}"
-                            th:data-currency="${expense.currency}"
-                            th:data-paid-by="${expense.paidBy.getId()}">Edit</button>
+                                th:data-id="${expense.id}"
+                                th:data-name="${expense.name}"
+                                th:data-amount="${expense.amount}"
+                                th:data-currency="${expense.currency}"
+                                th:data-paid-by="${expense.paidBy.getId()}">Edit</button>
                     </td>
                     <td>
                         <form method="post" th:action="@{/expenses/delete}" >
@@ -138,52 +190,57 @@
 
             </table>
 
-            <button onclick="showExpenseModal(this)">Add Expense</button>
+        </div>
+        <div class="modal-bg">
+            <div class="modal-box">
+                <h1>Add new expense</h1>
+                <button class="close-modal-btn" type="button">&times</button>
 
-            <div class="modal-bg">
-                <div class="modal-box">
-                    <h1>Add new expense</h1>
-                    <button class="close-modal-btn" type="button" onclick="closeExpenseModal()">&times</button>
+                <form id="expenseForm" method="post" th:object="${expense}">
+                    <!-- Add hidden field for expense ID -->
+                    <input type="hidden" name="id">
 
-                    <form id="expenseForm" method="post" th:object="${expense}">
-                        <!-- Add hidden field for expense ID -->
-                        <input type="hidden" name="id">
+                    <div>
+                        <label for="exp-name">Name: </label>
+                        <input id="exp-name" type="text" name="name" th:field="*{name}">
+                    </div>
+                    <div>
+                        <label for="exp-amount">Amount: </label>
+                        <input id="exp-amount" type="number" name="amount" th:field="*{amount}">
+                    </div>
+                    <div>
+                        <label for="exp-currency">Currency: </label>
+                        <select id="exp-currency" name="currency" th:field="*{currency}">
+                            <option th:each="currency : ${currencies}" th:text="${currency}" th:value="${currency}"></option>
+                        </select>
+                    </div>
 
-                        <div>
-                            <label for="exp-name">Name: </label>
-                            <input id="exp-name" type="text" name="name" th:field="*{name}">
-                        </div>
-                        <div>
-                            <label for="exp-amount">Amount: </label>
-                            <input id="exp-amount" type="number" name="amount" th:field="*{amount}">
-                        </div>
-                        <div>
-                            <label for="exp-currency">Currency: </label>
-                            <select id="exp-currency" name="currency" th:field="*{currency}">
-                                <option th:each="currency : ${currencies}" th:text="${currency}" th:value="${currency}"></option>
-                            </select>
-                        </div>
+                    <div>
+                        <label for="exp-paid-by">Paid By: </label>
+                        <select id="exp-paid-by" name="paidBy" th:field="*{paidBy}">
+                            <option th:each="member : ${members}" th:text="${member.name}" th:value="${member.getId()}"></option>
+                        </select>
+                    </div>
+                    <!-- TODO allow selection of members involved in expense, for now we assume everyone is contributing to every expense -->
 
-                        <div>
-                            <label for="exp-paid-by">Paid By: </label>
-                            <select id="exp-paid-by" name="paidBy" th:field="*{paidBy}">
-                                <option th:each="member : ${members}" th:text="${member.name}" th:value="${member.getId()}"></option>
-                            </select>
-                        </div>
-                        <!-- TODO allow selection of members involved in expense, for now we assume everyone is contributing to every expense -->
+                    <button type="submit">Add Expense</button>
+                </form>
 
-                        <button type="submit">Add Expense</button>
-                    </form>
-
-                </div>
             </div>
         </div>
+
     </section>
     <section>
-        <h2>Owings</h2>
-        <form method="post" action="/calculate-owing">
-            <button type="submit">Calculate Owing</button>
-        </form>
+
+        <div id="owings-card" class="card">
+            <div class="card-header">
+                <h2>Owings</h2>
+                <form method="post" action="/calculate-owing">
+                    <button type="submit">Calculate Owing</button>
+                </form>
+            </div>
+        </div>
+
     </section>
 </main>
 <footer>
@@ -196,9 +253,17 @@
     for (let btn of editButtons){
         btn.addEventListener('click', enableMemberEdit)
     }
-    editButtons = document.getElementsByClassName("edit-exp-btn");
-    for (let btn of editButtons){
-        btn.addEventListener('click', enableExpenseEdit)
+
+    let closeModalButtons = document.getElementsByClassName("close-modal-btn");
+    for (let btn of closeModalButtons){
+        btn.addEventListener('click', closeModal)
+    }
+
+
+    function showMemberModal(){
+        const form = document.getElementById('memberForm');
+        const modal = form.closest(".modal-bg")
+        modal.style.display = "flex"; // make modal visible
     }
 
     function enableMemberEdit(e){
@@ -242,9 +307,9 @@
             form.querySelector('button[type="submit"]').textContent = 'Add Expense';
         }
     }
-    function closeExpenseModal(){
+    function closeModal(e){
         console.log("close expense modal")
-        document.getElementById('expenseForm').closest(".modal-bg").style.display = "none"; // hide modal
+        e.target.closest(".modal-bg").style.display = "none"; // hide modal
     }
 
 </script>
