@@ -46,10 +46,14 @@ class GroupExpenseTrackerControllerTest {
         // no members or expenses added
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(3))
+                .andExpect(model().size(7))
                 .andExpect(model().attributeExists("member"))
                 .andExpect(model().attributeExists("expense"))
                 .andExpect(model().attributeExists("currencies"))
+                .andExpect(model().attributeExists("expenseSum"))
+                .andExpect(model().attributeExists("expenseCount"))
+                .andExpect(model().attributeExists("memberCount"))
+                .andExpect(model().attributeExists("owings"))
                 .andExpect(view().name("home"));
 
         // add a member & expense
