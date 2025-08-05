@@ -37,20 +37,15 @@ public class GroupExpenseTrackerController {
         model.addAttribute("expenseSum", expenseRepo.sumAllExpenses());
         model.addAttribute("expenseCount", expenseRepo.count());
 
-
-        // TODO total expenses
-
         model.addAttribute("currencies", Currency.values());
-
-        OwingCalculator owingCalculator = new OwingCalculator();
         model.addAttribute("owings", owingCalculator.calculateOwings(members, expenses).entrySet().stream().toArray());
 
 
         return "home";
     }
 
-    @PostMapping("/members/create")
-    public String addMember(@ModelAttribute Member member){
+    @PostMapping({"/members/create", "/members/edit"})
+    public String saveMember(@ModelAttribute Member member){
         memberRepo.save(member);
         return "redirect:/";
     }
@@ -60,28 +55,14 @@ public class GroupExpenseTrackerController {
         return "redirect:/";
     }
 
-    @PostMapping("/members/edit")
-    public String editMember(@RequestParam("id") Long id,  @RequestParam("name")String newName){
-        Member m = memberRepo.findById(id).get();
-        m.setName(newName);
-        memberRepo.save(m);
-
-        return "redirect:/";
-    }
-
-    @PostMapping("/expenses/create")
-    public String addExpense(@ModelAttribute Expense expense){
+    @PostMapping({"/expenses/create", "/expenses/edit"})
+    public String saveExpense(@ModelAttribute Expense expense){
         expenseRepo.save(expense);
         return "redirect:/";
     }
     @PostMapping("/expenses/delete")
     public String removeExpense(@RequestParam("id") Long id){
         expenseRepo.deleteById(id);
-        return "redirect:/";
-    }
-    @PostMapping("/expenses/edit")
-    public String editExpense(@ModelAttribute Expense expense){
-        expenseRepo.save(expense);
         return "redirect:/";
     }
 }

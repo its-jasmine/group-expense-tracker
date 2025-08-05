@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Divido | Home</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
 
@@ -15,6 +16,14 @@
 
         }
 
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
 
         /* Modal Styling*/
         .modal-bg {
@@ -24,7 +33,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black */
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(10px); /* For older webkit browsers*/
 
             display: none; /*change to flex to make visible*/
@@ -34,26 +43,60 @@
 
         .modal-box {
             background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px darkgray;
-            width: 40%;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
             padding: 20px;
             position: relative
 
         }
         .close-modal-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        .close-modal-btn:hover {
+            background: var(--bg-light);
+        }
 
-        .card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-purple);
         }
 
         /* Buttons */
@@ -79,6 +122,15 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
         }
+        .action-btn {
+            color: var(--text-light);
+            padding: 10px 15px;
+        }
+
+        .action-btn:hover {
+            background: var(--bg-light);
+        }
+
 
 
         /* Members Section */
@@ -102,7 +154,6 @@
         .member-item:hover {
             background: #d4c5ff;
         }
-
         .member-info {
             display: flex;
             align-items: center;
@@ -120,6 +171,9 @@
             color: white;
             font-weight: 600;
         }
+
+        /*
+
 
         .balance {
             font-weight: 600;
@@ -141,7 +195,7 @@
         .balance.zero {
             background: #f3f4f6;
             color: var(--text-light);
-        }
+        }*/
 
 
         /* Expenses Table */
@@ -200,34 +254,39 @@
         <div id="members-card" class="card">
             <div class="card-header flex-row">
                 <h2>Members</h2>
-                <button class="btn-primary" onclick="showMemberModal()">Add Member</button>
+                <button class="btn-primary" onclick="showMemberModal(this)">Add Member</button>
             </div>
             <div class="members-list">
 
-                <div th:if="${members}" th:each="member : ${members}" class="flex-row member-item">
-
-                    <form class="flex-row" method="post" th:action="@{/members/edit}" >
-                        <input type="hidden" th:value="${member.getId()}" name="id">
+                <div th:if="${members}" th:each="member : ${members}" class="member-item">
+                    <div class="member-info">
+                        <div class="member-avatar" th:text="${member.getName().charAt(0)}"></div>
                         <p class="member-name" th:text="${member.getName()}"></p>
-                        <input class="edit-text-input" hidden type="text" th:value="${member.getName()}" name="name" >
-                        <button type="button" class="edit-member-btn">Edit</button>
-                        <button hidden class="done-member-btn" type="submit">Done</button>
-                    </form>
+                    </div>
+
+                    <button type="button" class="action-btn" onclick="showMemberModal(this)"
+                            th:data-id="${member.getId()}"
+                            th:data-name="${member.getName()}">
+                        <i class="fa fa-pencil"></i>
+                    </button>
 
                     <form method="post" th:action="@{/members/delete}" >
                         <input type="hidden" th:value="${member.getId()}" name="id">
-                        <button type="submit">Delete</button>
+                        <button class="action-btn" type="submit"><i class="fa fa-trash-o"></i></button>
                     </form>
 
                 </div>
             </div>
             <div class="modal-bg">
                 <div class="modal-box">
-                    <h1>Add new member</h1>
+                    <h1>Add New Member</h1>
                     <button class="close-modal-btn" type="button">&times</button>
-                    <form id="memberForm" method="post" th:action="@{/members/create}" th:object="${member}">
-                        <label for="member-name">Name: </label>
-                        <input id="member-name" type="text" th:field="*{name}">
+                    <form id="memberForm" method="post" th:object="${member}">
+                        <div class="form-group">
+                            <input type="hidden" name="id">
+                            <label for="name">Name: </label>
+                            <input id="name" type="text" th:field="*{name}">
+                        </div>
                         <button type="submit">Add Member</button>
                     </form>
                 </div>
@@ -245,7 +304,8 @@
                     <th>Amount</th>
                     <th>Currency</th>
                     <th>Paid By</th>
-                    <th colspan="2">Actions</th>
+                    <th></th>
+                    <th colspan="2" style="text-align: center">Actions</th>
 
                 </thead>
                 <tr th:if="${expenses}" th:each="expense : ${expenses}" >
@@ -256,17 +316,18 @@
                     <td>
                         <!-- Using server-side data attributes to be able to populate edit modal.
                         TODO As the amount of data increases, using a separate request to fetch this data may be better-->
-                        <button onclick="showExpenseModal(this)"
+                        <button class="action-btn"  onclick="showExpenseModal(this)"
                                 th:data-id="${expense.id}"
                                 th:data-name="${expense.name}"
                                 th:data-amount="${expense.amount}"
                                 th:data-currency="${expense.currency}"
-                                th:data-paid-by="${expense.paidBy.getId()}">Edit</button>
+                                th:data-paid-by="${expense.paidBy.getId()}">
+                            <i class="fa fa-pencil"></i></button>
                     </td>
                     <td>
                         <form method="post" th:action="@{/expenses/delete}" >
                             <input type="hidden" th:value="${expense.getId()}" name="id">
-                            <button  class="edit-exp-btn" type="submit">Delete</button>
+                            <button class="action-btn" type="submit"><i class="fa fa-trash-o"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -276,29 +337,29 @@
         </div>
         <div class="modal-bg">
             <div class="modal-box">
-                <h1>Add new expense</h1>
+                <h1>Add New Expense</h1>
                 <button class="close-modal-btn" type="button">&times</button>
 
                 <form id="expenseForm" method="post" th:object="${expense}">
                     <!-- Add hidden field for expense ID -->
                     <input type="hidden" name="id">
 
-                    <div>
+                    <div class="form-group">
                         <label for="exp-name">Name: </label>
                         <input id="exp-name" type="text" name="name" th:field="*{name}">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="exp-amount">Amount: </label>
                         <input id="exp-amount" type="number" name="amount" th:field="*{amount}">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="exp-currency">Currency: </label>
                         <select id="exp-currency" name="currency" th:field="*{currency}">
                             <option th:each="currency : ${currencies}" th:text="${currency}" th:value="${currency}"></option>
                         </select>
                     </div>
 
-                    <div>
+                    <div class="form-group">
                         <label for="exp-paid-by">Paid By: </label>
                         <select id="exp-paid-by" name="paidBy" th:field="*{paidBy}">
                             <option th:each="member : ${members}" th:text="${member.name}" th:value="${member.getId()}"></option>
@@ -334,63 +395,74 @@
 </body>
 
 <script>
-    let editButtons = document.getElementsByClassName("edit-member-btn");
-    for (let btn of editButtons){
-        btn.addEventListener('click', enableMemberEdit)
-    }
-
     let closeModalButtons = document.getElementsByClassName("close-modal-btn");
     for (let btn of closeModalButtons){
         btn.addEventListener('click', closeModal)
     }
 
+    const MODAL_CONFIGS = {
+        member: {
+            formId: 'memberForm',
+            fields: ['name'],
+            actions: { edit: '/members/edit', create: '/members/create' },
+            text: {
+                editTitle: 'Edit Member',
+                addTitle: 'Add New Member',
+                editButton: 'Update Member',
+                addButton: 'Add Member'
+            }
+        },
+        expense: {
+            formId: 'expenseForm',
+            fields: ['name', 'amount', 'currency', 'paidBy'],
+            actions: { edit: '/expenses/edit', create: '/expenses/create' },
+            text: {
+                editTitle: 'Edit Expense',
+                addTitle: 'Add New Expense',
+                editButton: 'Update Expense',
+                addButton: 'Add Expense'
+            }
+        }
+    };
 
-    function showMemberModal(){
-        const form = document.getElementById('memberForm');
-        const modal = form.closest(".modal-bg")
-        modal.style.display = "flex"; // make modal visible
-    }
-
-    function enableMemberEdit(e){
-        const editButton = e.target;
-        editButton.hidden = true;
-
-        const form = editButton.parentElement;
-
-        form.querySelector(".edit-text-input").hidden = false; // make text box visible
-        form.querySelector(".member-name").hidden = true; // make name hidden
-        form.querySelector(".done-member-btn").hidden = false; // make done button visible
-    }
-
-    function showExpenseModal(src){
-        console.log("show expense modal")
-        const expenseData = src.dataset;
-        const form = document.getElementById('expenseForm');
-
-        console.log('All expense data:', expenseData);
-        console.log('Paid by value:', expenseData.paidBy);
-        console.log('Paid by (with hyphen):', expenseData['paid-by']);
+    function showModal(src, config){
+        const data = src.dataset;
+        const form = document.getElementById(config.formId);
 
         // find modal that contains the form
         const modal = form.closest(".modal-bg")
         modal.style.display = "flex"; // make modal visible
 
-        if (expenseData && expenseData.id) {
-            // Edit mode
-            form.elements['name'].value = expenseData.name || '';
-            form.elements['amount'].value = expenseData.amount || '';
-            form.elements['currency'].value = expenseData.currency || '';
-            form.elements['paidBy'].value = expenseData.paidBy || '';
-            form.elements['id'].value = expenseData.id;
+        if (data && data.id) { // Edit mode
+            form.elements["id"].value = data.id;
+            config.fields.forEach(field => {
+                if (form.elements[field]) {
+                    form.elements[field].value = data[field] || "" ;
+                } else {
+                    console.log("Unable to populate field: " + field);
+                }
+            })
 
-            form.action = '/expenses/edit';
-            form.querySelector('button[type="submit"]').textContent = 'Update Expense';
-        } else {
-            // Add mode
+            form.action = config.actions.edit;
+            modal.querySelector("h1").textContent = config.text.editTitle;
+            form.querySelector('button[type="submit"]').textContent = config.text.editButton;
+        } else { // Add mode
             form.reset();
-            form.action = '/expenses/create';
-            form.querySelector('button[type="submit"]').textContent = 'Add Expense';
+            form.action = config.actions.create;
+            modal.querySelector("h1").textContent =  config.text.addTitle;
+            form.querySelector('button[type="submit"]').textContent =  config.text.addButton;
         }
+
+
+    }
+
+
+    function showMemberModal(src){
+        showModal(src,MODAL_CONFIGS.member);
+    }
+
+    function showExpenseModal(src){
+        showModal(src,MODAL_CONFIGS.expense);
     }
     function closeModal(e){
         console.log("close expense modal")
