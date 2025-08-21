@@ -34,7 +34,7 @@ public class GroupExpenseTrackerApplication {
 			for (int i  = 1; i <= 3; i++){
 				m = new Member("Member " + i);
 				memberRepo.save(m);
-				expenseRepository.save(new Expense("test" + i,3 * i , Currency.CAD, m, null));
+				expenseRepository.save(new Expense("test" + i,3 * i , Currency.CAD, m, null, Expense.Category.ACCOMMODATION));
 			}
 		};
 	}

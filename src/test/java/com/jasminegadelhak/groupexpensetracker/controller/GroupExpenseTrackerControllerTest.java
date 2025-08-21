@@ -59,7 +59,7 @@ class GroupExpenseTrackerControllerTest {
         // add a member & expense
         Member m1 = new Member("memberTest");
         when(memberRepository.findAll()).thenReturn(List.of(m1));
-        when(expenseRepository.findAll()).thenReturn(List.of(new Expense("expenseTest", 5, Currency.CAD, m1, null)));
+        when(expenseRepository.findAll()).thenReturn(List.of(new Expense("expenseTest", 5, Currency.CAD, m1, null, null)));
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
