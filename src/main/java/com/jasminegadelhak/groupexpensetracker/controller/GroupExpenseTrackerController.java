@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class GroupExpenseTrackerController {
         model.addAttribute("expenseCount", expenseRepo.count());
 
         model.addAttribute("currencies", Currency.values());
+        model.addAttribute("categories", Expense.Category.values());
         model.addAttribute("owings", owingCalculator.calculateOwings(members, expenses).entrySet().stream().toArray());
 
 
@@ -50,8 +52,20 @@ public class GroupExpenseTrackerController {
         return "redirect:/";
     }
     @PostMapping("/members/delete")
-    public String removeMember(@RequestParam("id") Long id){
+    public String removeMember(@RequestParam("id") Long id, RedirectAttributes redirectAttributes){
+        Member member = memberRepo.findById(id).get();
+        // Check if member has any expenses
+        List<Expense> memberExpenses = expenseRepo.findByPaidBy(member);
+
+        if (!memberExpenses.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Cannot delete member - they have paid for " + memberExpenses.size() +
+                            " expense(s). Please reassign or delete these expenses first.");
+            return "redirect:/";
+        }
         memberRepo.deleteById(id);
+
+
         return "redirect:/";
     }
 
