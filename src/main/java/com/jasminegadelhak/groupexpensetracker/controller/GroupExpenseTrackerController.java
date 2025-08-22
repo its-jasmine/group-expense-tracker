@@ -38,6 +38,7 @@ public class GroupExpenseTrackerController {
         model.addAttribute("expenseCount", expenseRepo.count());
 
         model.addAttribute("currencies", Currency.values());
+        model.addAttribute("categories", Expense.Category.values());
         model.addAttribute("owings", owingCalculator.calculateOwings(members, expenses).entrySet().stream().toArray());
 
 

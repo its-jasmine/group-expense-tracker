@@ -300,12 +300,13 @@
             </div>
             <table class="expenses-table" th:if="${expenses}" >
                 <thead>
-                    <th>Expense</th>
-                    <th>Amount</th>
-                    <th>Currency</th>
-                    <th>Paid By</th>
-                    <th></th>
-                    <th colspan="2" style="text-align: center">Actions</th>
+                <th>Expense</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Paid By</th>
+                <th>Category</th>
+                <th></th>
+                <th colspan="2" style="text-align: center">Actions</th>
 
                 </thead>
                 <tr th:if="${expenses}" th:each="expense : ${expenses}" >
@@ -313,6 +314,7 @@
                     <td class="expense-amount" th:text="|$${#numbers.formatDecimal(expense.getAmount(),1,2)}|"></td>
                     <td th:text="${expense.getCurrency()}"></td>
                     <td th:text="${expense.getPaidBy().getName()}"></td>
+                    <td th:text="${expense.getCategory().name()}"></td>
                     <td>
                         <!-- Using server-side data attributes to be able to populate edit modal.
                         TODO As the amount of data increases, using a separate request to fetch this data may be better-->
@@ -321,7 +323,8 @@
                                 th:data-name="${expense.name}"
                                 th:data-amount="${expense.amount}"
                                 th:data-currency="${expense.currency}"
-                                th:data-paid-by="${expense.paidBy.getId()}">
+                                th:data-paid-by="${expense.paidBy.getId()}"
+                                th:data-category="${expense.getCategory().name()}">
                             <i class="fa fa-pencil"></i></button>
                     </td>
                     <td>
@@ -358,6 +361,14 @@
                             <option th:each="currency : ${currencies}" th:text="${currency}" th:value="${currency}"></option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="exp-category">Category: </label>
+                        <select id="exp-category" name="currency" th:field="*{category}">
+                            <option th:each="category : ${categories}" th:text="${category}" th:value="${category}"></option>
+                        </select>
+                    </div>
+
 
                     <div class="form-group">
                         <label for="exp-paid-by">Paid By: </label>
