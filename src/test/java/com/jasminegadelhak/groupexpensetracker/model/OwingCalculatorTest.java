@@ -14,9 +14,9 @@ class OwingCalculatorTest {
     private static Member Bob = new Member("Bob");
     private static Member Rick = new Member("Rick");
     private static List<Member> memberList = new ArrayList<>(List.of(John, Bob, Rick));
-    private static Expense expense1 = new Expense("test1",3 ,Currency.CAD, John, null); // TODO update to account for 'members'
-    private static Expense expense2 = new Expense("test2",9 ,Currency.CAD, Bob, null);
-    private static Expense expense3 = new Expense("test3",18 ,Currency.CAD, Rick, null);
+    private static Expense expense1 = new Expense("Dinner in Florence",3 ,Currency.CAD, John, null, null); // TODO update to account for 'members'
+    private static Expense expense2 = new Expense("Train to Rome",9 ,Currency.CAD, Bob, null, null);
+    private static Expense expense3 = new Expense("Hotel in Milan",18 ,Currency.CAD, Rick, null, null);
     private static List<Expense> expenseList = new ArrayList<>(List.of(expense1, expense2, expense3));
 
     /*
@@ -68,7 +68,7 @@ class OwingCalculatorTest {
         assertEquals(9, owingCalculator.calculateTotalPaid(Bob, Currency.CAD, expenseList));
         assertEquals(18, owingCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
 
-        expenseList.add(new Expense("test4",20 ,Currency.CAD, Rick, null));
+        expenseList.add(new Expense("test4",20 ,Currency.CAD, Rick, null, null));
 
         assertEquals(38, owingCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
     }

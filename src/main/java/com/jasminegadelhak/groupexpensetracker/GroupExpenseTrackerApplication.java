@@ -11,6 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @SpringBootApplication
 public class GroupExpenseTrackerApplication {
 
@@ -29,12 +34,29 @@ public class GroupExpenseTrackerApplication {
 		or other startup activities.
 		https://mkyong.com/spring-boot/spring-boot-commandlinerunner-example/
 		 */
+
 		return (args) -> {
-			Member m = null;
-			for (int i  = 1; i <= 3; i++){
-				m = new Member("Member " + i);
-				memberRepo.save(m);
-				expenseRepository.save(new Expense("test" + i,3 * i , Currency.CAD, m, null));
+			Member alice = new Member("Alice");
+			Member bob = new Member("Bob");
+			Member charlie = new Member("Charlie");
+
+			memberRepo.save(alice);
+			memberRepo.save(bob);
+			memberRepo.save(charlie);
+
+			// Sample expenses for the trip
+			List<Expense> expenses = Arrays.asList(
+					new Expense("Rome Hotel (3 nights)", 550, Currency.CAD, alice, null, Expense.Category.ACCOMMODATION),
+					new Expense("Dinner in Milan", 120, Currency.CAD, bob, null, Expense.Category.FOOD),
+					new Expense("Train from Rome to Florence", 180, Currency.CAD, charlie, null, Expense.Category.TRANSPORTATION),
+					new Expense("Cooking Class in Florence", 200, Currency.CAD, alice, null, Expense.Category.ACTIVITY),
+					new Expense("Gelato in Florence", 15, Currency.CAD, charlie, null, Expense.Category.FOOD),
+					new Expense("Vatican Museum Tickets", 90, Currency.CAD, bob, null, Expense.Category.ACTIVITY),
+					new Expense("Taxi to Airport", 60, Currency.CAD, alice, null, Expense.Category.TRANSPORTATION)
+			);
+
+			for (Expense e : expenses) {
+				expenseRepository.save(e);
 			}
 		};
 	}
