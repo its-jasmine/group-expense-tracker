@@ -46,29 +46,36 @@ class GroupExpenseTrackerControllerTest {
         // no members or expenses added
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(7))
+                .andExpect(model().size(8))
+                .andExpect(view().name("home"))
                 .andExpect(model().attributeExists("member"))
                 .andExpect(model().attributeExists("expense"))
                 .andExpect(model().attributeExists("currencies"))
+                .andExpect(model().attributeExists("categories"))
                 .andExpect(model().attributeExists("expenseSum"))
                 .andExpect(model().attributeExists("expenseCount"))
                 .andExpect(model().attributeExists("memberCount"))
-                .andExpect(model().attributeExists("owings"))
-                .andExpect(view().name("home"));
+                .andExpect(model().attributeExists("owings"));
 
         // add a member & expense
         Member m1 = new Member("memberTest");
         when(memberRepository.findAll()).thenReturn(List.of(m1));
-        when(expenseRepository.findAll()).thenReturn(List.of(new Expense("expenseTest", 5, Currency.CAD, m1, null, null)));
+        when(expenseRepository.findAll()).thenReturn(List.of(new Expense("expenseTest", 5, Currency.CAD, m1, null, Expense.Category.ACCOMMODATION)));
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
+                .andExpect(model().size(10))
                 .andExpect(view().name("home"))
                 .andExpect(model().attributeExists("member"))
                 .andExpect(model().attributeExists("expense"))
                 .andExpect(model().attributeExists("members"))
                 .andExpect(model().attributeExists("expenses"))
-                .andExpect(model().attributeExists("currencies"));
+                .andExpect(model().attributeExists("currencies"))
+                .andExpect(model().attributeExists("categories"))
+                .andExpect(model().attributeExists("expenseSum"))
+                .andExpect(model().attributeExists("expenseCount"))
+                .andExpect(model().attributeExists("memberCount"))
+                .andExpect(model().attributeExists("owings"));
     }
 
     @Test
