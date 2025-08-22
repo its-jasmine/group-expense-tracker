@@ -36,7 +36,6 @@ public class GroupExpenseTrackerApplication {
 		 */
 
 		return (args) -> {
-
 			Member alice = new Member("Alice");
 			Member bob = new Member("Bob");
 			Member charlie = new Member("Charlie");

@@ -7,12 +7,20 @@ import java.util.List;
 
 @Entity
 public class Expense {
+
+    public enum Category {
+        FOOD,
+        ACCOMMODATION,
+        ACTIVITY,
+        TRANSPORTATION
+    }
     @Id
     @GeneratedValue
     private Long id;
     private String name;
     private float amount; // TODO use BigDecimal, maybe create custom Amount class
     private Currency currency;
+    private Category category;
     @ManyToOne // TODO future iteration: change to list, @OneToMany
     private Member paidBy;
     @OneToMany
@@ -21,12 +29,13 @@ public class Expense {
         this.members = new ArrayList<>();
     }
 
-    public Expense(String name, float amount, Currency currency, Member paidBy, List<Member> members) {
+    public Expense(String name, float amount, Currency currency, Member paidBy, List<Member> members, Category category) {
         this.name = name;
         this.amount = amount;
         this.currency = currency;
         this.paidBy = paidBy;
         this.members = members;
+        this.category = category;
     }
 
     /* Getters & Setters */
@@ -75,5 +84,12 @@ public class Expense {
     }
     public void setMembers(List<Member> members) {
         this.members = members;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
