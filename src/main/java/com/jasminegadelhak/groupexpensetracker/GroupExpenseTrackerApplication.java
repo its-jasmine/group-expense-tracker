@@ -46,13 +46,13 @@ public class GroupExpenseTrackerApplication {
 
 			// Sample expenses for the trip
 			List<Expense> expenses = Arrays.asList(
-					new Expense("Rome Hotel (3 nights)", 550, Currency.EUR, alice, null, Expense.Category.ACCOMMODATION),
-					new Expense("Dinner in Milan", 120, Currency.EUR, bob, null, Expense.Category.FOOD),
-					new Expense("Train from Rome to Florence", 180, Currency.EUR, charlie, null, Expense.Category.TRANSPORTATION),
-					new Expense("Cooking Class in Florence", 200, Currency.EUR, alice, null, Expense.Category.ACTIVITY),
-					new Expense("Gelato in Florence", 15, Currency.EUR, charlie, null, Expense.Category.FOOD),
-					new Expense("Vatican Museum Tickets", 90, Currency.EUR, bob, null, Expense.Category.ACTIVITY),
-					new Expense("Taxi to Airport", 60, Currency.EUR, alice, null, Expense.Category.TRANSPORTATION)
+					new Expense("Rome Hotel (3 nights)", 550, Currency.CAD, alice, null, Expense.Category.ACCOMMODATION),
+					new Expense("Dinner in Milan", 120, Currency.CAD, bob, null, Expense.Category.FOOD),
+					new Expense("Train from Rome to Florence", 180, Currency.CAD, charlie, null, Expense.Category.TRANSPORTATION),
+					new Expense("Cooking Class in Florence", 200, Currency.CAD, alice, null, Expense.Category.ACTIVITY),
+					new Expense("Gelato in Florence", 15, Currency.CAD, charlie, null, Expense.Category.FOOD),
+					new Expense("Vatican Museum Tickets", 90, Currency.CAD, bob, null, Expense.Category.ACTIVITY),
+					new Expense("Taxi to Airport", 60, Currency.CAD, alice, null, Expense.Category.TRANSPORTATION)
 			);
 
 			for (Expense e : expenses) {
