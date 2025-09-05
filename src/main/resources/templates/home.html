@@ -392,11 +392,7 @@
         <div id="owings-card" class="card">
             <div class="card-header">
                 <h2>Settlement Summary</h2>
-                <div th:each="member : ${owings}" class="bordered-container">
-                    <span>
-                        <p th:each="owing : ${member.getValue()}" th:text="|${member.getKey().getName()} pays ${owing.key.getName()}: ${#numbers.formatCurrency(owing.value)}|"></p>
-                    </span>
-                </div>
+                <p th:each="debt : ${owings}" th:text="${debt.toString()}"/>
             </div>
         </div>
 

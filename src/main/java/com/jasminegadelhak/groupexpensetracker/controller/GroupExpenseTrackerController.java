@@ -15,13 +15,13 @@ public class GroupExpenseTrackerController {
     private MemberRepository memberRepo;
     private ExpenseRepository expenseRepo;
 
-    private OwingCalculator owingCalculator;
+    private DebtCalculator debtCalculator;
 
     @Autowired
     GroupExpenseTrackerController(MemberRepository memberRepo, ExpenseRepository expenseRepo){
         this.memberRepo = memberRepo;
         this.expenseRepo = expenseRepo;
-        this.owingCalculator = new OwingCalculator();
+        this.debtCalculator = new DebtCalculator();
     }
 
     @GetMapping
@@ -40,7 +40,7 @@ public class GroupExpenseTrackerController {
 
         model.addAttribute("currencies", Currency.values());
         model.addAttribute("categories", Expense.Category.values());
-        model.addAttribute("owings", owingCalculator.calculateOwings(members, expenses).entrySet().stream().toArray());
+        model.addAttribute("owings", debtCalculator.calculateAllDebt(members, expenses));
 
 
         return "home";
