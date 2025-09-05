@@ -2,6 +2,7 @@ package com.jasminegadelhak.groupexpensetracker.controller;
 
 import com.jasminegadelhak.groupexpensetracker.model.*;
 import com.jasminegadelhak.groupexpensetracker.repositories.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -39,6 +42,11 @@ class GroupExpenseTrackerControllerTest {
         public MemberRepository memberRepository() {
             return mock(MemberRepository.class);
         }
+    }
+
+    @BeforeEach
+    void setUp(){
+        reset(memberRepository, expenseRepository);
     }
 
     @Test
@@ -89,13 +97,33 @@ class GroupExpenseTrackerControllerTest {
     }
 
     @Test
-    void removeMember() throws Exception {
+    void removeMemberWithNoExpense() throws Exception {
+        Member m1 = new Member("memberTest");
+        when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(m1));
+        when(expenseRepository.findByPaidBy(m1)).thenReturn(Collections.emptyList());
+
+
         mockMvc.perform(post("/members/delete")
                         .param("id", "5"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
         verify(memberRepository).deleteById(any(Long.class));
+    }
+    @Test
+    void removeMemberWithExistingExpense() throws Exception {
+        Member m1 = new Member("memberTestt");
+        when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(m1));
+        when(expenseRepository.findByPaidBy(m1)).thenReturn(List.of(new Expense(), new Expense()));
+
+
+        mockMvc.perform(post("/members/delete")
+                        .param("id", "5"))
+                .andExpect(flash().attributeExists("error"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        verify(memberRepository, never()).deleteById(any(Long.class));
     }
 
     @Test
