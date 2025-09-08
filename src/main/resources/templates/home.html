@@ -172,7 +172,7 @@
             font-weight: 600;
         }
 
-        /*
+
 
 
         .balance {
@@ -195,7 +195,7 @@
         .balance.zero {
             background: #f3f4f6;
             color: var(--text-light);
-        }*/
+        }
 
 
         /* Expenses Table */
@@ -264,6 +264,8 @@
                     <div class="member-info">
                         <div class="member-avatar" th:text="${member.getName().charAt(0)}"></div>
                         <p class="member-name" th:text="${member.getName()}"></p>
+                        <div th:if="${balances.containsKey(member)}" th:class="|balance ${balances.get(member) > 0 ? 'positive' : 'negative'}|" th:text="|${balances.get(member) > 0 ? '+' : ''}${#numbers.formatCurrency(balances.get(member))}|"></div>
+                        <div th:if="${!balances.containsKey(member)}" th:class="balance zero">0.00</div>
                     </div>
 
                     <button type="button" class="action-btn" onclick="showMemberModal(this)"
@@ -312,7 +314,7 @@
                 </thead>
                 <tr th:if="${expenses}" th:each="expense : ${expenses}" >
                     <td th:text="${expense.getName()}"></td>
-                    <td class="expense-amount" th:text="|$${#numbers.formatDecimal(expense.getAmount(),1,2)}|"></td>
+                    <td class="expense-amount" th:text="${#numbers.formatCurrency(expense.getAmount())}"></td>
                     <td th:text="${expense.getCurrency()}"></td>
                     <td th:text="${expense.getPaidBy().getName()}"></td>
 
