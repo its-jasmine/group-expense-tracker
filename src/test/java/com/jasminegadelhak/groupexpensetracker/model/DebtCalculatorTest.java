@@ -5,11 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OwingCalculatorTest {
+class DebtCalculatorTest {
     private static Member John = new Member("John");
     private static Member Bob = new Member("Bob");
     private static Member Rick = new Member("Rick");
@@ -52,24 +51,22 @@ class OwingCalculatorTest {
             'Rick': {} // Rick doesn't owe anything
         }
          */
-        OwingCalculator owingCalculator = new OwingCalculator();
 
-        Map<Member, Map<Member, Float>> actualOwing = owingCalculator.calculateOwings(memberList, expenseList);
-        assertEquals(2, actualOwing.get(John).get(Bob));
-        assertEquals(5, actualOwing.get(John).get(Rick));
-        assertEquals(3, actualOwing.get(Bob).get(Rick));
-        assertFalse(actualOwing.containsKey(Rick));
+        List<Debt> actualOwing = DebtCalculator.calculateAllDebt(memberList, expenseList);
+        assertEquals(3, actualOwing.size());
+        assertTrue(actualOwing.contains(new Debt(John, Bob, (float)2, Currency.CAD)));
+        assertTrue(actualOwing.contains(new Debt(John, Rick, (float)5, Currency.CAD)));
+        assertTrue(actualOwing.contains(new Debt(Bob, Rick, (float)3, Currency.CAD)));
     }
 
     @Test
     void calculateTotalPaid() {
-        OwingCalculator owingCalculator = new OwingCalculator();
-        assertEquals(3, owingCalculator.calculateTotalPaid(John, Currency.CAD, expenseList));
-        assertEquals(9, owingCalculator.calculateTotalPaid(Bob, Currency.CAD, expenseList));
-        assertEquals(18, owingCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
+        assertEquals(3, DebtCalculator.calculateTotalPaid(John, Currency.CAD, expenseList));
+        assertEquals(9, DebtCalculator.calculateTotalPaid(Bob, Currency.CAD, expenseList));
+        assertEquals(18, DebtCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
 
         expenseList.add(new Expense("test4",20 ,Currency.CAD, Rick, null, null));
 
-        assertEquals(38, owingCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
+        assertEquals(38, DebtCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
     }
 }

@@ -54,7 +54,7 @@ class GroupExpenseTrackerControllerTest {
         // no members or expenses added
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(8))
+                .andExpect(model().size(9))
                 .andExpect(view().name("home"))
                 .andExpect(model().attributeExists("member"))
                 .andExpect(model().attributeExists("expense"))
@@ -63,7 +63,9 @@ class GroupExpenseTrackerControllerTest {
                 .andExpect(model().attributeExists("expenseSum"))
                 .andExpect(model().attributeExists("expenseCount"))
                 .andExpect(model().attributeExists("memberCount"))
-                .andExpect(model().attributeExists("owings"));
+                .andExpect(model().attributeExists("owings"))
+                .andExpect(model().attributeExists("balances"));
+        ;
 
         // add a member & expense
         Member m1 = new Member("memberTest");
@@ -72,7 +74,7 @@ class GroupExpenseTrackerControllerTest {
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().size(10))
+                .andExpect(model().size(11))
                 .andExpect(view().name("home"))
                 .andExpect(model().attributeExists("member"))
                 .andExpect(model().attributeExists("expense"))
@@ -83,7 +85,9 @@ class GroupExpenseTrackerControllerTest {
                 .andExpect(model().attributeExists("expenseSum"))
                 .andExpect(model().attributeExists("expenseCount"))
                 .andExpect(model().attributeExists("memberCount"))
-                .andExpect(model().attributeExists("owings"));
+                .andExpect(model().attributeExists("owings"))
+                .andExpect(model().attributeExists("balances"));
+
     }
 
     @Test
