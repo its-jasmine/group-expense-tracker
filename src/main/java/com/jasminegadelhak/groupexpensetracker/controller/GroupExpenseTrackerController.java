@@ -21,7 +21,6 @@ public class GroupExpenseTrackerController {
     GroupExpenseTrackerController(MemberRepository memberRepo, ExpenseRepository expenseRepo){
         this.memberRepo = memberRepo;
         this.expenseRepo = expenseRepo;
-        this.debtCalculator = new DebtCalculator();
     }
 
     @GetMapping
@@ -40,7 +39,10 @@ public class GroupExpenseTrackerController {
 
         model.addAttribute("currencies", Currency.values());
         model.addAttribute("categories", Expense.Category.values());
-        model.addAttribute("owings", debtCalculator.calculateAllDebt(members, expenses));
+        List<Debt> debtList = DebtCalculator.calculateAllDebt(members, expenses);
+        model.addAttribute("owings", debtList);
+        model.addAttribute("balances", BalanceCalculator.calculateBalances(debtList));
+
 
 
         return "home";

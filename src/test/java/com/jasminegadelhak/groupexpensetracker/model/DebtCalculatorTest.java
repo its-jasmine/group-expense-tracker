@@ -51,9 +51,8 @@ class DebtCalculatorTest {
             'Rick': {} // Rick doesn't owe anything
         }
          */
-        DebtCalculator debtCalculator = new DebtCalculator();
 
-        List<Debt> actualOwing = debtCalculator.calculateAllDebt(memberList, expenseList);
+        List<Debt> actualOwing = DebtCalculator.calculateAllDebt(memberList, expenseList);
         assertEquals(3, actualOwing.size());
         assertTrue(actualOwing.contains(new Debt(John, Bob, (float)2, Currency.CAD)));
         assertTrue(actualOwing.contains(new Debt(John, Rick, (float)5, Currency.CAD)));
@@ -62,13 +61,12 @@ class DebtCalculatorTest {
 
     @Test
     void calculateTotalPaid() {
-        DebtCalculator debtCalculator = new DebtCalculator();
-        assertEquals(3, debtCalculator.calculateTotalPaid(John, Currency.CAD, expenseList));
-        assertEquals(9, debtCalculator.calculateTotalPaid(Bob, Currency.CAD, expenseList));
-        assertEquals(18, debtCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
+        assertEquals(3, DebtCalculator.calculateTotalPaid(John, Currency.CAD, expenseList));
+        assertEquals(9, DebtCalculator.calculateTotalPaid(Bob, Currency.CAD, expenseList));
+        assertEquals(18, DebtCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
 
         expenseList.add(new Expense("test4",20 ,Currency.CAD, Rick, null, null));
 
-        assertEquals(38, debtCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
+        assertEquals(38, DebtCalculator.calculateTotalPaid(Rick, Currency.CAD, expenseList));
     }
 }

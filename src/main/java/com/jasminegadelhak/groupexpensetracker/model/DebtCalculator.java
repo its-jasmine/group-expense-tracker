@@ -4,7 +4,7 @@ import java.util.*;
 
 public class DebtCalculator {
 
-    public List<Debt> calculateAllDebt(List<Member> members, List<Expense> expenses) {
+    public static List<Debt> calculateAllDebt(List<Member> members, List<Expense> expenses) {
 
             Map<Member, Float> totalPaid = getAllMembersTotalPaid(members, expenses);
 
@@ -33,11 +33,11 @@ public class DebtCalculator {
 
 
 
-    private float calculatedOwedAmount(float amount1, float amount2, int split){
+    private static float calculatedOwedAmount(float amount1, float amount2, int split){
         return (amount1 - amount2) / split; // assuming even split, TODO account for other splits
     }
 
-    public Map<Member, Float> getAllMembersTotalPaid(List<Member> members, List<Expense> expenses){
+    public static Map<Member, Float> getAllMembersTotalPaid(List<Member> members, List<Expense> expenses){
         Map<Member, Float> totalPaid = new HashMap<>(members.size());
 
         for (Member member : members) {
@@ -47,7 +47,7 @@ public class DebtCalculator {
         return totalPaid;
     }
 
-    public float calculateTotalPaid(Member member, Currency currency, List<Expense> expenses){
+    public static float calculateTotalPaid(Member member, Currency currency, List<Expense> expenses){
         float total = 0;
 
         for (Expense expense : expenses){
