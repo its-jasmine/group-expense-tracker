@@ -265,7 +265,7 @@
                         <div class="member-avatar" th:text="${member.getName().charAt(0)}"></div>
                         <p class="member-name" th:text="${member.getName()}"></p>
                         <div th:if="${balances.containsKey(member)}" th:class="|balance ${balances.get(member) > 0 ? 'positive' : 'negative'}|" th:text="|${balances.get(member) > 0 ? '+' : ''}${#numbers.formatCurrency(balances.get(member))}|"></div>
-                        <div th:if="${!balances.containsKey(member)}" th:class="balance zero">0.00</div>
+                        <div th:if="${!balances.containsKey(member)}" class="balance zero">0.00</div>
                     </div>
 
                     <button type="button" class="action-btn" onclick="showMemberModal(this)"

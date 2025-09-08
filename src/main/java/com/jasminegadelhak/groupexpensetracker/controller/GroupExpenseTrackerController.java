@@ -15,8 +15,6 @@ public class GroupExpenseTrackerController {
     private MemberRepository memberRepo;
     private ExpenseRepository expenseRepo;
 
-    private DebtCalculator debtCalculator;
-
     @Autowired
     GroupExpenseTrackerController(MemberRepository memberRepo, ExpenseRepository expenseRepo){
         this.memberRepo = memberRepo;

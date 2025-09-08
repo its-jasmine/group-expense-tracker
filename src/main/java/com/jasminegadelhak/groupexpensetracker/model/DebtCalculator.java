@@ -6,7 +6,7 @@ public class DebtCalculator {
 
     public static List<Debt> calculateAllDebt(List<Member> members, List<Expense> expenses) {
 
-            Map<Member, Float> totalPaid = getAllMembersTotalPaid(members, expenses);
+        Map<Member, Float> totalPaid = getAllMembersTotalPaid(members, expenses);
 
         List<Debt> debtList = new ArrayList<>();
 
