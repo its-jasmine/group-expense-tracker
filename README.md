@@ -20,3 +20,6 @@ Just enjoy your trip and let Divido handle the math!
 - Thymeleaf
 - In-memory database (for now)
 
+## Current Design
+<img width="1349" height="1505" alt="Divido-uml-class-diagram" src="https://github.com/user-attachments/assets/3f887829-ecec-492b-9928-da1cb161247c" />
+
