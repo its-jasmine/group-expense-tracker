@@ -172,14 +172,13 @@
             font-weight: 600;
         }
 
-
-
-
-        .balance {
+        .balance, .category {
             font-weight: 600;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.875rem;
+            background-color: lavender;
+            width: fit-content;
         }
 
         .balance.positive {
@@ -309,7 +308,6 @@
                 <th>Currency</th>
                 <th>Paid By</th>
                 <th>Category</th>
-                <th></th>
                 <th colspan="2" style="text-align: center">Actions</th>
                 </thead>
                 <tr th:if="${expenses}" th:each="expense : ${expenses}" >
@@ -318,7 +316,9 @@
                     <td th:text="${expense.getCurrency()}"></td>
                     <td th:text="${expense.getPaidBy().getName()}"></td>
 
-                    <td th:text="${expense.getCategory().name()}"></td>
+                    <td >
+                        <p class="category" th:text="${expense.getCategory().name()}"></p>
+                    </td>
                     <td>
                         <!-- Using server-side data attributes to be able to populate edit modal.
                         TODO As the amount of data increases, using a separate request to fetch this data may be better-->
