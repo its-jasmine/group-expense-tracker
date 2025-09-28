@@ -1,10 +1,5 @@
+import formatterCAD from "../formatter"
 export default function Header({memberCount, expenseCount, expenseSum}) {
-    // Create a NumberFormat object for CAD Dollars in English
-    const formatterCAD = new Intl.NumberFormat('en-US', { // TODO move to separate formatting helper file
-    style: 'currency',
-    currency: 'CAD',
-    });
-
     return (
         <header>
             <div className="header-content">
