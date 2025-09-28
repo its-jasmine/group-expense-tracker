@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 public class BalanceCalculator {
-    public static Map<Member, Float> calculateBalances(List<Debt> debtList){
-        Map<Member, Float> balances = new HashMap<>();
+    public static Map<Long, Float> calculateBalances(List<Debt> debtList){
+        Map<Long, Float> balances = new HashMap<>();
         for (Debt debt: debtList){
             if (debt.currency().equals(Currency.CAD)) {// TODO, make it work for all currencies
-                if (!balances.containsKey(debt.payer())) balances.put(debt.payer(), 0f);
-                if (!balances.containsKey(debt.payee())) balances.put(debt.payee(), 0f);
-                balances.put(debt.payer(), balances.get(debt.payer()) - debt.amount());
-                balances.put(debt.payee(), balances.get(debt.payee()) + debt.amount());
+                Long payerId = debt.payer().getId();
+                Long payeeId = debt.payee().getId();
+                if (!balances.containsKey(payerId)) balances.put(payerId, 0f);
+                if (!balances.containsKey(payeeId)) balances.put(payeeId, 0f);
+                balances.put(payerId, balances.get(payerId) - debt.amount());
+                balances.put(payeeId, balances.get(payeeId) + debt.amount());
             }
         }
         return balances;

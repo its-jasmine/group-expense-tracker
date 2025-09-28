@@ -22,7 +22,7 @@ class BalanceCalculatorTest {
     @Test
     void NoDebts() {
         // Simple two-person scenario
-        Map<Member, Float> balances = BalanceCalculator.calculateBalances(Collections.emptyList());
+        Map<Long, Float> balances = BalanceCalculator.calculateBalances(Collections.emptyList());
         assertTrue(balances.isEmpty());
     }
 
@@ -31,7 +31,7 @@ class BalanceCalculatorTest {
         // Simple two-person scenario
         List<Debt> debtList = List.of(new Debt(m1, m2, 25.50f, Currency.CAD)); // bill owes bob CAD$25.50
 
-        Map<Member, Float> balances = BalanceCalculator.calculateBalances(debtList);
+        Map<Long, Float> balances = BalanceCalculator.calculateBalances(debtList);
 
         assertEquals(2, balances.size());
         assertTrue(balances.containsKey(m1));
@@ -51,7 +51,7 @@ class BalanceCalculatorTest {
                 new Debt(m3,m4, 25f, Currency.CAD) // jane owes jill CAD$25.00
                 );
 
-        Map<Member, Float> balances = BalanceCalculator.calculateBalances(debtList);
+        Map<Long, Float> balances = BalanceCalculator.calculateBalances(debtList);
 
         assertEquals(4, balances.size());
         assertTrue(balances.containsKey(m1));
@@ -76,7 +76,7 @@ class BalanceCalculatorTest {
                 new Debt(m4,m1, 50f, Currency.CAD) // jill owes bill CAD$50.00
         );
 
-        Map<Member, Float> balances = BalanceCalculator.calculateBalances(debtList);
+        Map<Long, Float> balances = BalanceCalculator.calculateBalances(debtList);
 
         assertEquals(4, balances.size());
         assertTrue(balances.containsKey(m1));
@@ -101,7 +101,7 @@ class BalanceCalculatorTest {
                 new Debt(m4,m1, 20f, Currency.CAD) // jill owes bill CAD$20.00
         );
 
-        Map<Member, Float> balances = BalanceCalculator.calculateBalances(debtList);
+        Map<Long, Float> balances = BalanceCalculator.calculateBalances(debtList);
 
         assertEquals(4, balances.size());
         assertTrue(balances.containsKey(m1));

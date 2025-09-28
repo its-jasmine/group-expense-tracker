@@ -72,7 +72,7 @@ public class ApiController {
         List<Expense> expenses = expenseRepository.findAll();
 
         List<Debt> debts = DebtCalculator.calculateAllDebt(members, expenses);
-        Map<Member, Float> balances = BalanceCalculator.calculateBalances(debts);
+        Map<Long, Float> balances = BalanceCalculator.calculateBalances(debts);
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("members", members);
