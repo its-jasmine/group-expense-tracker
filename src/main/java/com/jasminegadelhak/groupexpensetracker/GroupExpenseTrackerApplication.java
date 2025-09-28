@@ -10,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,6 +59,21 @@ public class GroupExpenseTrackerApplication {
 
 			for (Expense e : expenses) {
 				expenseRepository.save(e);
+			}
+		};
+	}
+
+	// Allow Vite dev server to call the API during development
+	@Bean
+	@Profile("!test")
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/api/**")
+						.allowedOrigins("http://localhost:5173")
+						.allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS")
+						.allowCredentials(true);
 			}
 		};
 	}
