@@ -6,7 +6,7 @@ export default function Members({members, balances}){
     console.log("balances", balances)
     
     return (
-        <div id="members-card" className="card">
+        <div id="members-card" className="card" style={{width: '50%'}}>
             <div className="card-header flex-row">
                 <h2>Members</h2>
                 <button className="btn-primary">Add Member</button>
